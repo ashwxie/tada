@@ -1,29 +1,26 @@
 import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
+import { persist } from 'zustand/middleware';
 import { User } from '@/features/auth/types/auth.types';
-
-const isDev = process.env.NEXT_PUBLIC_BYPASS_AUTH === 'true';
+import { logout as clearAuthCookie } from '@/features/auth/services/auth.service';
 
 interface AuthState {
   token: string | null;
   user: User | null;
   setAuth: (token: string, user: User) => void;
-  clearAuth: () => void;
+  logout: () => void;
 }
 
 export const useAuthStore = create<AuthState>()(
   persist(
-(set) => ({
-      // 2. 如果是开发环境，直接给 Mock 数据；否则为 null
-      token: isDev ? "dev-bypass-token" : null,
-      user: isDev ? { id: 1, name: "Ash", email: "ash@operator.os" } : null,
-      
+    (set) => ({
+      token: null,
+      user: null,
       setAuth: (token, user) => set({ token, user }),
-      clearAuth: () => set({ token: null, user: null }),
+      logout: () => {
+        clearAuthCookie(); // Clear the cookie
+        set({ token: null, user: null }); // Clear the store
+      },
     }),
-    {
-      name: 'auth-storage',
-      storage: createJSONStorage(() => localStorage), 
-    }
+    { name: 'auth-storage' }
   )
 );

@@ -5,7 +5,7 @@ import { login } from '@/features/auth/services/auth.service';
 import { useAuthStore } from '@/store/auth.store';
 
 export default function TestLoginPage() {
-  const { user, token, setAuth, clearAuth } = useAuthStore();
+  const { user, token, setAuth, logout } = useAuthStore();
   const [loading, setLoading] = useState(false);
 
   // Verification log to console
@@ -26,6 +26,11 @@ export default function TestLoginPage() {
     }
   };
 
+  const handleLogout = async() => {
+    logout();
+    window.location.href = '/login';
+  }
+
   return (
     <div className="p-8 space-y-4">
       <h1 className="text-2xl font-bold">Auth Foundation Test</h1>
@@ -45,7 +50,7 @@ export default function TestLoginPage() {
         </button>
 
         <button 
-          onClick={clearAuth}
+          onClick={handleLogout}
           className="px-4 py-2 bg-red-600 text-white rounded"
         >
           Clear Auth
