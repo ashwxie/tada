@@ -1,10 +1,11 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useAuthStore } from '@/store/auth.store';
 import { useResourceStore } from '@/store/resource.store';
 import { login } from '@/features/auth/services/auth.service';
-
 
 export default function MainLayout({
   children,
@@ -14,6 +15,10 @@ export default function MainLayout({
   const { fp, dice, gainFP, triggerBFRBPenalty } = useResourceStore();
   const { user, token, setAuth, logout } = useAuthStore();
   const [loading, setLoading] = useState(false);
+  
+  // 🟩 引入路徑監聽器，自動抓取當前 URL 路由
+  const pathname = usePathname();
+
   useEffect(() => {
     console.log('Current Auth State:', { user, token });
   }, [user, token]);
@@ -30,10 +35,12 @@ export default function MainLayout({
       setLoading(false);
     }
   };
+
   const handleLogout = async() => {
     logout();
     window.location.href = '/login';
   };
+
   return (
     <div className="min-h-screen bg-[#050505] text-gray-400 font-mono flex flex-col uppercase text-xs selection:bg-cyan-900 selection:text-cyan-100">
       
@@ -50,22 +57,22 @@ export default function MainLayout({
           <span className="text-cyan-500">NP_COEFF: +11.0%</span>
           <span className="text-zinc-600">2026/05/19 | CORE: STABLE_SYNC</span>
         </div>
-                  <div className="flex gap-4">
-            <button 
-              onClick={handleLogin}
-              disabled={loading}
-              className="px-4 py-2 bg-blue-600 text-white rounded disabled:bg-gray-400"
-            >
-              {loading ? 'Logging in...' : 'Trigger Mock Login'}
-            </button>
+        <div className="flex gap-4">
+          <button 
+            onClick={handleLogin}
+            disabled={loading}
+            className="px-4 py-2 bg-blue-600 text-white rounded disabled:bg-gray-400"
+          >
+            {loading ? 'Logging in...' : 'Trigger Mock Login'}
+          </button>
 
-            <button 
-              onClick={handleLogout}
-              className="px-4 py-2 bg-red-600 text-white rounded"
-            >
-              Clear Auth
-            </button>
-          </div>
+          <button 
+            onClick={handleLogout}
+            className="px-4 py-2 bg-red-600 text-white rounded"
+          >
+            Clear Auth
+          </button>
+        </div>
       </header>
 
       {/* MAIN CONTENT WRAPPER */}
@@ -89,23 +96,53 @@ export default function MainLayout({
               PHASE 01: RESOURCE ACCUMULATION
             </div>
 
+            {/* 🟩 路由級導航矩陣 - 基於路徑名精確匹配高亮樣式 */}
             <nav className="space-y-2">
-              <div className="bg-cyan-950/30 text-cyan-500 border border-cyan-900/50 px-3 py-2 rounded flex items-center gap-2 cursor-pointer">
+              <Link 
+                href="/"
+                className={`px-3 py-2 rounded flex items-center gap-2 cursor-pointer transition-all border ${
+                  pathname === '/dashboard' 
+                    ? 'bg-cyan-950/30 text-cyan-500 border-cyan-900/50' 
+                    : 'border-transparent text-zinc-500 hover:text-white'
+                }`}
+              >
                 <span>⚡</span> CORE CORE
-              </div>
-              <div className="px-3 py-2 hover:text-white cursor-pointer transition-colors flex items-center gap-2">
+              </Link>
+              
+              <Link 
+                href="/task"
+                className={`px-3 py-2 rounded flex items-center gap-2 cursor-pointer transition-all border ${
+                  pathname === '/dashboard/task' 
+                    ? 'bg-cyan-950/30 text-cyan-500 border-cyan-900/50' 
+                    : 'border-transparent text-zinc-500 hover:text-white'
+                }`}
+              >
                 <span>∿</span> ACTION MATRIX
-              </div>
-              <div className="px-3 py-2 hover:text-white cursor-pointer transition-colors flex items-center gap-2">
+              </Link>
+              
+              <Link 
+                href="/reward"
+                className={`px-3 py-2 rounded flex items-center gap-2 cursor-pointer transition-all border ${
+                  pathname === '/dashboard/reward' 
+                    ? 'bg-amber-950/20 text-amber-500 border-amber-900/30' 
+                    : 'border-transparent text-zinc-500 hover:text-white'
+                }`}
+              >
                 <span>⊕</span> REWARD CENTER
-              </div>
-              <div className="px-3 py-2 hover:text-white cursor-pointer transition-colors flex items-center gap-2">
-                <span>◷</span> BUFFER STREAM
-              </div>
+              </Link>
+              
+              <Link 
+                href="/statistics"
+                className={`px-3 py-2 rounded flex items-center gap-2 cursor-pointer transition-all border ${
+                  pathname === '/dashboard/statistics' 
+                    ? 'bg-indigo-950/20 text-indigo-500 border-indigo-900/30' 
+                    : 'border-transparent text-zinc-500 hover:text-white'
+                }`}
+              >
+                <span>◷</span> STATISTICS
+              </Link>
             </nav>
           </div>
-
-
 
           {/* SIDEBAR BOTTOM: DICE & PENALTY */}
           <div className="border-t border-zinc-900 pt-4 space-y-4">
@@ -122,7 +159,7 @@ export default function MainLayout({
           </div>
         </aside>
 
-        {/* DYNAMIC PAGE CONTENT INJECTED HERE */}
+        {/* 🟩 真正符合 Next.js 範式的動態路由插槽 */}
         {children}
         
       </div>
