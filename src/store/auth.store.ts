@@ -1,7 +1,7 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-import { User } from '@/features/auth/types/auth.types';
-import { logout as clearAuthCookie } from '@/features/auth/services/auth.service';
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import { User } from "@/features/auth/types/auth.types";
+import { logout as clearAuthCookie } from "@/features/auth/services/auth.service";
 
 interface AuthState {
   token: string | null;
@@ -21,6 +21,6 @@ export const useAuthStore = create<AuthState>()(
         set({ token: null, user: null }); // Clear the store
       },
     }),
-    { name: 'auth-storage' }
-  )
+    { name: "auth-storage" },
+  ),
 );

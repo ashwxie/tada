@@ -1,43 +1,57 @@
-'use client';
+"use client";
 
-import { useResourceStore } from '@/store/resource.store';
+import { useResourceStore } from "@/store/resource.store";
 
 export default function TestLoginPage() {
-
   const { dice, xp, gainDice, gainXP } = useResourceStore();
 
   return (
     <main className="flex-1 p-8 flex flex-col items-center justify-center relative bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-zinc-900/20 via-black to-black overflow-y-auto">
-      
       {/* CIRCULAR DICE TRACKER */}
-      <div 
+      <div
         className="relative w-64 h-64 flex items-center justify-center cursor-pointer group"
         onClick={() => gainDice(1)}
       >
         <svg className="absolute inset-0 w-full h-full -rotate-90">
-          <circle cx="128" cy="128" r="120" stroke="#111" strokeWidth="4" fill="none" />
-          <circle 
-            cx="128" cy="128" r="120" 
-            stroke="#00e5ff" strokeWidth="4" fill="none" 
-            strokeDasharray="753" 
-            strokeDashoffset={753 - (753 * Math.min(dice, 100)) / 100} 
+          <circle
+            cx="128"
+            cy="128"
+            r="120"
+            stroke="#111"
+            strokeWidth="4"
+            fill="none"
+          />
+          <circle
+            cx="128"
+            cy="128"
+            r="120"
+            stroke="#00e5ff"
+            strokeWidth="4"
+            fill="none"
+            strokeDasharray="753"
+            strokeDashoffset={753 - (753 * Math.min(dice, 100)) / 100}
             className="transition-all duration-500 ease-out"
             strokeLinecap="round"
           />
         </svg>
-        
+
         <div className="text-center group-hover:scale-105 transition-transform">
-          <div className="text-[9px] text-zinc-500 tracking-[0.2em] mb-2">NEURAL PERMISSION</div>
-          <div className="text-6xl text-white font-sans font-light tracking-tighter">{dice}</div>
-          <div className="text-[9px] text-cyan-600 tracking-[0.2em] mt-2">ACCUMULATED DICE</div>
+          <div className="text-[9px] text-zinc-500 tracking-[0.2em] mb-2">
+            NEURAL PERMISSION
+          </div>
+          <div className="text-6xl text-white font-sans font-light tracking-tighter">
+            {dice}
+          </div>
+          <div className="text-[9px] text-cyan-600 tracking-[0.2em] mt-2">
+            ACCUMULATED DICE
+          </div>
         </div>
       </div>
 
       {/* BOTTOM CARDS */}
       <div className="flex gap-4 mt-16">
-        
         {/* ACTIVE BUFFS CARD */}
-        <div 
+        <div
           className="w-64 border border-zinc-800 bg-black/50 p-4 rounded cursor-pointer hover:border-zinc-700 transition-colors"
           onClick={() => gainXP(100)}
         >
@@ -55,7 +69,9 @@ export default function TestLoginPage() {
             </div>
             <div className="flex justify-between items-center">
               <span className="text-zinc-600">OPERATING_MODE</span>
-              <span className="bg-cyan-950 text-cyan-400 px-2 py-0.5 rounded text-[9px]">GROWTH</span>
+              <span className="bg-cyan-950 text-cyan-400 px-2 py-0.5 rounded text-[9px]">
+                GROWTH
+              </span>
             </div>
           </div>
         </div>
@@ -72,8 +88,7 @@ export default function TestLoginPage() {
             [ FACTORY RESET PROTOCOL ]
           </div>
         </div>
-
       </div>
-    </main>      
+    </main>
   );
 }
