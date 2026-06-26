@@ -2,12 +2,10 @@
 import { useState } from "react";
 import { login } from "@/features/auth/services/auth.service";
 import { useAuthStore } from "@/store/auth.store";
-import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const setAuth = useAuthStore((s) => s.setAuth);
-  const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,6 +27,7 @@ export default function LoginPage() {
         <button className="bg-blue-600 text-white px-4 py-2 rounded">
           {loading ? "Authenticating..." : "Login to Dashboard"}
         </button>
+
       </form>
     </div>
   );
